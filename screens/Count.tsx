@@ -1,6 +1,10 @@
+import {
+    AdMobBanner
+} from "expo";
 import { Audio } from 'expo-av';
+import Constants from 'expo-constants';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Clock from './Clock';
 const randomColor = require('randomcolor');
@@ -21,6 +25,13 @@ export default function Count() {
     const [cheerSound, setCheerSound]: any = useState();
     const [displayCount, setDisplayCount]: any = useState([]);
     const [displayText, setDisplayText] = useState(text);
+    const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
+    const AD_UNIT_ID_ANDROID_BANNER = Constants.manifest.extra.adIdAndroidBanner;
+    const unitIdBanner = __DEV__ ?
+        "ca-app-pub-3940256099942544/6300978111" : Platform.select({
+            ios: AD_UNIT_ID_IOS_BANNER,
+            android: AD_UNIT_ID_ANDROID_BANNER,
+        })
 
     const countCalc: any = (sec: number | null) => {
         const position: number = (Number(sec) / 3) + 1;
@@ -157,6 +168,12 @@ export default function Count() {
 
     return (
         <View style={styles.container}>
+            <AdMobBanner
+                style={styles.bottomBanner}
+                bannerSize="fullBanner"
+                adUnitID={unitIdBanner}
+                testDeviceID="EMULATOR"
+            />
             <Text style={styles.displayText}>
                 {displayText}
             </Text>
@@ -234,6 +251,10 @@ const styles = StyleSheet.create({
     countDownNumberDark: {
         backgroundColor: '#000000',
         color: '#fff'
+    },
+    bottomBanner: {
+        position: "absolute",
+        bottom: 0
     },
 
 });
