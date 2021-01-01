@@ -1,12 +1,29 @@
+import { AdMobBanner } from 'expo-ads-admob';
+import Constants from 'expo-constants';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-
+import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
+
+
+
+const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
+const AD_UNIT_ID_ANDROID_BANNER = Constants.manifest.extra.adIdAndroidBanner;
+const unitIdBanner = __DEV__ ?
+  "ca-app-pub-3940256099942544/6300978111" : Platform.select({
+    ios: AD_UNIT_ID_IOS_BANNER,
+    android: AD_UNIT_ID_ANDROID_BANNER,
+  })
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Count />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Count />
+        <AdMobBanner
+          style={styles.bottomBanner}
+          adUnitID={unitIdBanner}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -17,5 +34,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  bottomBanner: {
+    position: "absolute",
+    bottom: 0
   },
 });
