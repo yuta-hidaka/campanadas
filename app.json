@@ -20,7 +20,8 @@
       "supportsTablet": true,
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
-      }
+      },
+      "bundleIdentifier": "com.yuta322.campanadas"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +30,8 @@
       },
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~8421256202"
-      }
+      },
+      "package": "com.yuta322.campanadas"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,7 +39,7 @@
     "extra": {
       "MainTagsHomeID": "4b48c4cc-c273-415f-b6b9-bc4ae24c53be",
       "adIdIosBanner": "ca-app-pub-8220669417943263/6642282437",
-      "adIdAndroidBanner": "ca-app-pub-8220669417943263/5795092860",
+      "adIdAndroidBanner": "ca-app-pub-8220669417943263/5795092860"
     }
   }
 }
