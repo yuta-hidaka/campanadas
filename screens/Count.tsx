@@ -1,10 +1,11 @@
 import { Audio } from 'expo-av';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import Clock from './Clock';
 
 
+const isIos = Platform.OS === 'ios';
 export default function Count() {
     const text = 'Prepararos para comer las uvas !!!'
     const Cuartos = 'Los Cuartos  !!!'
@@ -224,8 +225,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         padding: 5,
-        width: 40,
-        height: 40,
+        width: isIos ? 40 : 50,
+        height: isIos ? 40 : 50,
         fontSize: 20,
         margin: 3
     },
