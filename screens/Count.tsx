@@ -179,7 +179,13 @@ export default function Count() {
                 )
             }
             <View>
-                <Button icon="play-circle-outline" style={{ marginTop: 20 }} color="#000000" mode="outlined" onPress={() => { setIsTest(!isTest) }}>
+                <Button
+                    icon="play-circle-outline"
+                    style={{ marginTop: 20, marginBottom: 50 }}
+                    color="#000000"
+                    mode="outlined"
+                    onPress={() => { setIsTest(!isTest) }}
+                >
                     {testText}
                 </Button>
             </View>
@@ -203,7 +209,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     displayText: {
-        fontSize: 30,
+        fontSize: 25,
         fontWeight: "bold"
     },
     time: {
