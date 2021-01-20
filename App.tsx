@@ -5,7 +5,6 @@ import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
 
 
-
 const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
 const AD_UNIT_ID_ANDROID_BANNER = Constants.manifest.extra.adIdAndroidBanner;
 const unitIdBanner = __DEV__ ?
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   bottomBanner: {

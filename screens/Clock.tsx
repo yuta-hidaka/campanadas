@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { RFValue } from "react-native-responsive-fontsize";
 
 export default class AnalogClock extends Component {
 
@@ -179,7 +180,7 @@ export default class AnalogClock extends Component {
 
 AnalogClock.defaultProps = {
     backgroundImage: './img/clockBack.png',
-    clockSize: 270,
+    clockSize: RFValue(250),
     clockBorderWidth: 7,
     clockCentreSize: 15,
     clockCentreColor: 'black',
@@ -190,12 +191,12 @@ AnalogClock.defaultProps = {
     hourHandOffset: 0,
     minuteHandColor: 'black',
     minuteHandCurved: true,
-    minuteHandLength: 100,
+    minuteHandLength:  RFValue(100),
     minuteHandWidth: 5,
     minuteHandOffset: 0,
     secondHandColor: 'black',
     secondHandCurved: false,
-    secondHandLength: 120,
+    secondHandLength:  RFValue(100),
     secondHandWidth: 2,
     secondHandOffset: 0,
 };

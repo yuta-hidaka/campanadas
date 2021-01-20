@@ -2,6 +2,7 @@ import { Audio } from 'expo-av';
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { RFValue } from "react-native-responsive-fontsize";
 import Clock from './Clock';
 
 
@@ -165,7 +166,7 @@ export default function Count() {
             </Text>
             {!hide &&
                 (<View style={styles.container}>
-                    <View style={{ marginTop: 10 }}>
+                    <View style={{ marginTop: 5 }}>
                         <Clock />
                     </View>
                     <View style={{ marginTop: 10 }}>
@@ -193,22 +194,22 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 30,
+        fontSize:  RFValue(15),
     },
     displayCount: {
         flexDirection: 'row',
         flexWrap: 'wrap'
     },
     countDown: {
-        fontSize: 30,
+        fontSize:  RFValue(15),
         fontWeight: "bold"
     },
     displayText: {
-        fontSize: 30,
+        fontSize:  RFValue(35),
         fontWeight: "bold"
     },
     time: {
-        fontSize: 30,
+        fontSize: RFValue(25),
     },
     img: {
         width: 30,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         padding: 5,
-        fontSize: 20,
+        fontSize: RFValue(14),
     },
     countDownNumberWrapper: {
         borderRadius: 50,
@@ -225,9 +226,9 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontWeight: "bold",
         padding: 5,
-        width: isIos ? 40 : 50,
-        height: isIos ? 40 : 50,
-        fontSize: 20,
+        width: isIos ? 35 : 50,
+        height: isIos ? 35 : 50,
+        fontSize:  RFValue(20),
         margin: 3
     },
     countDownNumberWhite: {
