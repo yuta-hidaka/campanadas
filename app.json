@@ -2,7 +2,7 @@
   "expo": {
     "name": "campanadas",
     "slug": "campanadas",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,7 +21,10 @@
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
       },
-      "bundleIdentifier": "com.yuta322.campanadas"
+      "bundleIdentifier": "com.yuta322.campanadas",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "Le agradeceríamos que permitiera el seguimiento de errores y mejorar la experiencia."
+      }
     },
     "android": {
       "versionCode": 5,

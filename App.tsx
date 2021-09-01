@@ -1,8 +1,9 @@
 import { AdMobBanner } from 'expo-ads-admob';
 import Constants from 'expo-constants';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
+import { requestPermissionsAsync } from 'expo-ads-admob';
 
 
 const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
@@ -13,6 +14,12 @@ const unitIdBanner = __DEV__ ?
     android: AD_UNIT_ID_ANDROID_BANNER,
   })
 export default function App() {
+
+  useEffect(() => {
+      (async () => {
+      await requestPermissionsAsync();
+    })();
+  })
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
