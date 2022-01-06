@@ -71,12 +71,13 @@ export default function Count() {
         );
         setCheerSound(sound);
         await sound.playAsync();
-        // await sound.unloadAsync();
     }
-    const sleep = (time: number) => {
-        return new Promise((resolve) => setTimeout(resolve, time));
-    }
-    const setClock = () => {
+
+    useEffect(() => {
+        return bellSound ? () => bellSound.unloadAsync() : undefined;
+    }, [bellSound]);
+
+    const setClock = async () => {
         const now = new Date();
         const year = now.getFullYear()
         const month = ('0' + (now.getMonth() + 1)).slice(-2)
@@ -86,24 +87,26 @@ export default function Count() {
         const sec = ('0' + now.getSeconds()).slice(-2)
         const secNumber = now.getSeconds()
         const minNumber = now.getMinutes()
-        const monthNumber = (now.getMonth() + 1)
-        const dateNumber = now.getDate()
+        let monthNumber = minNumber % 1 === 0 ? 12 : minNumber % 2 === 0 ? 1 : now.getMonth() + 1
+        let dateNumber = minNumber % 1 === 0 ? 31 : minNumber % 2 === 0 ? 1 : now.getDate
         if (secNumber === Sec) return;
         setTime(`${year}-${month}-${date} ${hour}:${min}:${sec}`)
-        if (isTest || monthNumber === 12 && dateNumber === 31) {
-            countCalc(secNumber);
-            setSec(secNumber)
-            if (secNumber === 0 || secNumber % 3 === 0 && secNumber <= 33) {
+        if (isTest || monthNumber === 12 && dateNumber === 31 || monthNumber === 1 && dateNumber === 1) {
+            if ((secNumber === 0 || secNumber % 3 === 0) && secNumber <= 33 && monthNumber === 1) {
+                countCalc(secNumber);
                 playBellSound();
+                setSec(secNumber)
             }
+
             switch (secNumber) {
                 case 0:
                     if (cheerSound) cheerSound.unloadAsync();
                     if (bellSound) bellSound.unloadAsync();
-                    if (bellSound2) bellSound2.unloadAsync();
                     if (CuartosSound) CuartosSound.unloadAsync();
+                    if (bellSound2) bellSound2.unloadAsync();
                     break;
                 case 34:
+                    if (monthNumber === 12) break;
                     countCalc(-1);
                     let tmpText = '';
                     setHide(true);
@@ -118,6 +121,7 @@ export default function Count() {
                     playCheerSound();
                     break;
                 case 36:
+                    if (monthNumber === 12) break;
                     setHide(false);
                     setDisplayText(text)
                     if (isTest || minNumber === 59) {
@@ -125,11 +129,12 @@ export default function Count() {
                     }
                     break;
                 case 44:
-                    playCuartos();
+                    if (monthNumber === 1) break;
+                    playCuartos()
                     setDisplayText(Cuartos);
                     break;
                 case 58:
-                    if (isTest || minNumber === 59) {
+                    if (isTest || minNumber === 59 && monthNumber === 1) {
                         setDisplayText(Campanadas);
                     } else {
                         setDisplayText(text);
@@ -200,18 +205,18 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize:  RFValue(15),
+        fontSize: RFValue(15),
     },
     displayCount: {
         flexDirection: 'row',
         flexWrap: 'wrap'
     },
     countDown: {
-        fontSize:  RFValue(15),
+        fontSize: RFValue(15),
         fontWeight: "bold"
     },
     displayText: {
-        fontSize:  RFValue(35),
+        fontSize: RFValue(35),
         fontWeight: "bold"
     },
     time: {
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
         padding: 5,
         width: isIos ? 35 : 50,
         height: isIos ? 35 : 50,
-        fontSize:  RFValue(20),
+        fontSize: RFValue(20),
         margin: 3
     },
     countDownNumberWhite: {
