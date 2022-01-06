@@ -1,6 +1,5 @@
-import { AdMobBanner } from 'expo-ads-admob';
+import { AdMobBanner, requestPermissionsAsync } from 'expo-ads-admob';
 import Constants from 'expo-constants';
-import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
@@ -16,12 +15,9 @@ const unitIdBanner = __DEV__ ?
 export default function App() {
   useEffect(() => {
     (async () => {
-      const { status } = await requestTrackingPermissionsAsync();
-      if (status === 'granted') {
-        console.log('Yay! I have user permission to track data');
-      }
+      await requestPermissionsAsync();
     })();
-  }, []);
+  })
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
