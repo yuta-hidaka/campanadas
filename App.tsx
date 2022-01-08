@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
+import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 
 
 const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
@@ -15,7 +16,10 @@ const unitIdBanner = __DEV__ ?
 export default function App() {
   useEffect(() => {
     (async () => {
-      await requestPermissionsAsync();
+      const { status } = await requestTrackingPermissionsAsync();
+      if (status === 'granted') {
+        await requestPermissionsAsync();
+      }
     })();
   })
   return (
