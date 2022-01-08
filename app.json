@@ -33,7 +33,7 @@
       }
     },
     "android": {
-      "versionCode": 7,
+      "versionCode": 8,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -42,7 +42,7 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~8421256202"
       },
       "package": "com.yuta322.campanadas",
-      "permissions": []
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
