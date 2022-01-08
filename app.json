@@ -2,7 +2,7 @@
   "expo": {
     "name": "campanadas",
     "slug": "campanadas",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,9 +21,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -35,7 +33,7 @@
       }
     },
     "android": {
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -52,6 +50,7 @@
       "MainTagsHomeID": "4b48c4cc-c273-415f-b6b9-bc4ae24c53be",
       "adIdIosBanner": "ca-app-pub-8220669417943263/6642282437",
       "adIdAndroidBanner": "ca-app-pub-8220669417943263/5795092860"
-    }
+    },
+    "description": ""
   }
 }

@@ -4,7 +4,9 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { RFValue } from "react-native-responsive-fontsize";
 import Clock from './Clock';
+import { Logs } from 'expo'
 
+Logs.enableExpoCliLogging()
 
 const isIos = Platform.OS === 'ios';
 export default function Count() {
@@ -27,7 +29,7 @@ export default function Count() {
 
     const countCalc: any = (sec: number | null) => {
         const position: number = (Number(sec) / 3) + 1;
-        const __chckColor = (v: number) => {
+        const __checkColor = (v: number) => {
             if (v <= position && position <= 12) return styles.countDownNumberDark;
             return styles.countDownNumberWhite;
         }
@@ -35,8 +37,8 @@ export default function Count() {
 
         const countNode = count.map((v) => {
             return (
-                <View key={v} style={[styles.countDownNumberWrapper, __chckColor(v)]}>
-                    <Text style={[styles.countDownNumber, __chckColor(v)]}>
+                <View key={v} style={[styles.countDownNumberWrapper, __checkColor(v)]}>
+                    <Text style={[styles.countDownNumber, __checkColor(v)]}>
                         {v}
                     </Text>
                 </View>
@@ -73,40 +75,44 @@ export default function Count() {
         await sound.playAsync();
     }
 
-    useEffect(() => {
-        return bellSound ? () => bellSound.unloadAsync() : undefined;
-    }, [bellSound]);
+    const unloadSounds = () => {
+        if (cheerSound) cheerSound.unloadAsync();
+        if (bellSound) bellSound.unloadAsync();
+        if (CuartosSound) CuartosSound.unloadAsync();
+        if (bellSound2) bellSound2.unloadAsync();
+    }
 
     const setClock = async () => {
         const now = new Date();
-        const year = now.getFullYear()
-        const month = ('0' + (now.getMonth() + 1)).slice(-2)
-        const date = ('0' + now.getDate()).slice(-2)
-        const hour = ('0' + now.getHours()).slice(-2)
-        const min = ('0' + now.getMinutes()).slice(-2)
-        const sec = ('0' + now.getSeconds()).slice(-2)
         const secNumber = now.getSeconds()
-        const minNumber = now.getMinutes()
-        let monthNumber = minNumber % 1 === 0 ? 12 : minNumber % 2 === 0 ? 1 : now.getMonth() + 1
-        let dateNumber = minNumber % 1 === 0 ? 31 : minNumber % 2 === 0 ? 1 : now.getDate
         if (secNumber === Sec) return;
+        setSec(secNumber)
+
+        const minNumber = now.getMinutes()
+        const monthNumber = now.getMonth() + 1
+        const dateNumber = now.getDate()
+        const year = now.getFullYear()
+        const month = ('0' + monthNumber).slice(-2)
+        const date = ('0' + dateNumber).slice(-2)
+        const hour = ('0' + now.getHours()).slice(-2)
+        const min = ('0' + minNumber).slice(-2)
+        const sec = ('0' + secNumber).slice(-2)
+
         setTime(`${year}-${month}-${date} ${hour}:${min}:${sec}`)
+
         if (isTest || monthNumber === 12 && dateNumber === 31 || monthNumber === 1 && dateNumber === 1) {
+            console.log(secNumber)
             if ((secNumber === 0 || secNumber % 3 === 0) && secNumber <= 33 && monthNumber === 1) {
                 countCalc(secNumber);
                 playBellSound();
-                setSec(secNumber)
             }
 
             switch (secNumber) {
                 case 0:
-                    if (cheerSound) cheerSound.unloadAsync();
-                    if (bellSound) bellSound.unloadAsync();
-                    if (CuartosSound) CuartosSound.unloadAsync();
-                    if (bellSound2) bellSound2.unloadAsync();
+                    unloadSounds()
                     break;
                 case 34:
-                    if (monthNumber === 12) break;
+                    if (!isTest && monthNumber === 12) break;
                     countCalc(-1);
                     let tmpText = '';
                     setHide(true);
@@ -121,7 +127,7 @@ export default function Count() {
                     playCheerSound();
                     break;
                 case 36:
-                    if (monthNumber === 12) break;
+                    if (!isTest && monthNumber === 12) break;
                     setHide(false);
                     setDisplayText(text)
                     if (isTest || minNumber === 59) {
@@ -129,7 +135,9 @@ export default function Count() {
                     }
                     break;
                 case 44:
-                    if (monthNumber === 1) break;
+                    if (!isTest && monthNumber === 1) {
+                        break;
+                    };
                     playCuartos()
                     setDisplayText(Cuartos);
                     break;
@@ -144,6 +152,15 @@ export default function Count() {
         }
 
     }
+
+    useEffect(() => {
+        return CuartosSound
+            ? () => {
+                console.log('Unloading Sound');
+                CuartosSound.unloadAsync();
+            }
+            : undefined;
+    }, [CuartosSound]);
 
     useEffect(() => {
         const interval = setInterval(() => setClock(), 10);
