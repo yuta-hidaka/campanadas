@@ -2,7 +2,7 @@
   "expo": {
     "name": "campanadas",
     "slug": "campanadas",
-    "version": "1.3.1",
+    "version": null,
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,7 +21,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
@@ -30,7 +32,8 @@
       "bundleIdentifier": "com.yuta322.campanadas",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "Le agradeceríamos que permitiera el seguimiento de errores y mejorar la experiencia."
-      }
+      },
+      "buildNumber": null
     },
     "android": {
       "versionCode": 8,
@@ -42,7 +45,10 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~8421256202"
       },
       "package": "com.yuta322.campanadas",
-      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
