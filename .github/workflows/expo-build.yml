@@ -25,6 +25,9 @@ jobs:
           expo-token: ${{ secrets.EXPO_TOKEN }}
           expo-cache: true
 
+      - name: Update standard version
+        run: yarn standard-version --release-as patch
+
       - name: Install dependencies
         run: |
           if [ -e yarn.lock ]; then
