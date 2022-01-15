@@ -22,14 +22,14 @@ jobs:
           expo-token: ${{ secrets.EXPO_TOKEN }}
           expo-cache: true
 
-      # - name: Setup git
-      #   run: git config --global user.email "yuta322@gmail.com" && git config --global user.name "Yuta Hidaka"
+      - name: Setup git
+        run: git config --global user.email "yuta322@gmail.com" && git config --global user.name "Yuta Hidaka"
 
-      # - name: Setup standard version
-      #   run: yarn add --dev standard-version@next standard-version-expo
+      - name: Setup standard version
+        run: yarn add --dev standard-version@next standard-version-expo
 
-      # - name: Update standard version
-      #   run: yarn standard-version --release-as patch
+      - name: Update standard version
+        run: yarn standard-version --release-as minor
 
       - name: Install dependencies
         run: |
