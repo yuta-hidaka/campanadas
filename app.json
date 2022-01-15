@@ -2,7 +2,7 @@
   "expo": {
     "name": "campanadas",
     "slug": "campanadas",
-    "version": null,
+    "version": "2.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -33,10 +33,10 @@
       "infoPlist": {
         "NSUserTrackingUsageDescription": "Le agradeceríamos que permitiera el seguimiento de errores y mejorar la experiencia."
       },
-      "buildNumber": null
+      "buildNumber": "2.1.0"
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 440020100,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
