@@ -1,10 +1,8 @@
-// import { AdMobBanner, requestPermissionsAsync } from 'expo-ads-admob';
 import Constants from 'expo-constants';
 import React, { useEffect } from 'react';
 import { Platform, SafeAreaView, StyleSheet, View } from 'react-native';
 import Count from './screens/Count';
-import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
-
+import * as StoreReview from 'expo-store-review';
 
 const AD_UNIT_ID_IOS_BANNER = Constants.manifest.extra.adIdIosBanner;
 const AD_UNIT_ID_ANDROID_BANNER = Constants.manifest.extra.adIdAndroidBanner;
@@ -16,18 +14,15 @@ const unitIdBanner = __DEV__ ?
 export default function App() {
   useEffect(() => {
     (async () => {
-      const { status } = await requestTrackingPermissionsAsync();
-      // await requestPermissionsAsync();
+      if (await StoreReview.hasAction()) {
+        StoreReview.requestReview()
+      }
     })();
   })
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <Count />
-        {/* <AdMobBanner
-          style={styles.bottomBanner}
-          adUnitID={unitIdBanner}
-        /> */}
       </View>
     </SafeAreaView>
   );

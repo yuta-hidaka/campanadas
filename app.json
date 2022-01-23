@@ -10,14 +10,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "plugins": [
-      [
-        "expo-tracking-transparency",
-        {
-          "userTrackingPermission": "Este identificador se utilizará para ofrecerle anuncios personalizados."
-        }
-      ]
-    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -30,9 +22,6 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
       },
       "bundleIdentifier": "com.yuta322.campanadas",
-      "infoPlist": {
-        "NSUserTrackingUsageDescription": "Le agradeceríamos que permitiera el seguimiento de errores y mejorar la experiencia."
-      },
       "buildNumber": "2.1.0"
     },
     "android": {
