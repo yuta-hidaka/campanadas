@@ -6,52 +6,41 @@ import { RFValue } from "react-native-responsive-fontsize";
 import Clock from "./Clock";
 import { Logs } from "expo";
 import NewClock from "./newClock";
+import ConfettiCannon from "react-native-confetti-cannon";
 
 Logs.enableExpoCliLogging();
 
 const isIos = Platform.OS === "ios";
+const GRAPE = 12;
+
 export default function Count() {
   const text = "Prepararos para comer las uvas !!!";
   const Cuartos = "Los Cuartos  !!!";
   const Campanadas = "Las Campanadas  !!!";
   const feliz = "Feliz año nuevo!!!🥳";
-  const [time, setTime] = useState("0000-00-00 00:00:00");
   const [Sec, setSec] = useState(0);
+  const [grape, setGrape] = useState(GRAPE);
   const [hide, setHide] = useState(false);
+  const [canon, setCanon] = useState<any>();
+
   const [isTest, setIsTest] = useState(false);
+
   const [testText, setTestText] = useState("TEST");
+
   const [bellSound, setBellSound]: any = useState();
   const [bellSound2, setBellSound2]: any = useState();
   const [CuartosSound, setCuartosSound]: any = useState();
   const [cheerSound, setCheerSound]: any = useState();
-  const [displayCount, setDisplayCount]: any = useState([]);
   const [displayText, setDisplayText] = useState(text);
 
-  const countCalc: any = (sec: number | null) => {
-    const position: number = Number(sec) / 3 + 1;
-    const __checkColor = (v: number) => {
-      if (v <= position && position <= 12) return styles.countDownNumberDark;
-      return styles.countDownNumberWhite;
-    };
-    const count = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-    const countNode = count.map((v) => {
-      return (
-        <View key={v} style={[styles.countDownNumberWrapper, __checkColor(v)]}>
-          <Text style={[styles.countDownNumber, __checkColor(v)]}>{v}</Text>
-        </View>
-      );
-    });
-    setDisplayCount(countNode);
-  };
-  const playBellSound = async () => {
+  const playCampanadas = async () => {
     const { sound } = await Audio.Sound.createAsync(
       require("../assets/bell.mp3")
     );
     setBellSound(sound);
     await sound.playAsync();
   };
-  const playBellSound2 = async () => {
+  const playReadyToCampanadas = async () => {
     const { sound } = await Audio.Sound.createAsync(
       require("../assets/bell2.mp3")
     );
@@ -80,97 +69,61 @@ export default function Count() {
     if (bellSound2) bellSound2.unloadAsync();
   };
 
-  const setClock = async () => {
-    const now = new Date();
+  const onChange = (now: Date) => {
     const secNumber = now.getSeconds();
     if (secNumber === Sec) return;
     setSec(secNumber);
 
-    const minNumber = now.getMinutes();
-    const monthNumber = now.getMonth() + 1;
-    const dateNumber = now.getDate();
-    const year = now.getFullYear();
-    const month = ("0" + monthNumber).slice(-2);
-    const date = ("0" + dateNumber).slice(-2);
-    const hour = ("0" + now.getHours()).slice(-2);
-    const min = ("0" + minNumber).slice(-2);
-    const sec = ("0" + secNumber).slice(-2);
+    const min = now.getMinutes();
+    const month = now.getMonth() + 1;
+    const date = now.getDate();
 
-    setTime(`${year}-${month}-${date} ${hour}:${min}:${sec}`);
+    const ready =
+      isTest || (month === 12 && date === 31) || (month === 1 && date === 1);
+    if (!ready) return;
 
-    if (
-      isTest ||
-      (monthNumber === 12 && dateNumber === 31) ||
-      (monthNumber === 1 && dateNumber === 1)
-    ) {
-      console.log(secNumber);
-      if (
-        (secNumber === 0 || secNumber % 3 === 0) &&
-        secNumber <= 33 &&
-        monthNumber === 1
-      ) {
-        countCalc(secNumber);
-        playBellSound();
-      }
-
-      switch (secNumber) {
-        case 0:
-          unloadSounds();
-          break;
-        case 34:
-          if (!isTest && monthNumber === 12) break;
-          countCalc(-1);
-          let tmpText = "";
-          setHide(true);
-          const max = 50;
-          for (let i = 0; i < max; i++) {
-            tmpText += "🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉";
-            if (i === max / 2) {
-              tmpText += feliz;
-            }
-            setDisplayText(tmpText);
-          }
-          playCheerSound();
-          break;
-        case 36:
-          if (!isTest && monthNumber === 12) break;
-          setHide(false);
-          setDisplayText(text);
-          if (isTest || minNumber === 59) {
-            playBellSound2();
-          }
-          break;
-        case 44:
-          if (!isTest && monthNumber === 1) {
-            break;
-          }
-          playCuartos();
-          setDisplayText(Cuartos);
-          break;
-        case 58:
-          if (isTest || (minNumber === 59 && monthNumber === 1)) {
-            setDisplayText(Campanadas);
-          } else {
-            setDisplayText(text);
-          }
-          break;
-      }
+    const campanadas =
+      (secNumber === 0 || secNumber % 3 === 0) &&
+      secNumber <= 33 &&
+      (month === 1 || isTest);
+    if (campanadas) {
+      setGrape((v) => v - 1);
+      playCampanadas();
+    }
+    switch (secNumber) {
+      case 0:
+        unloadSounds();
+        break;
+      case 34:
+        if (!isTest && month === 12) break;
+        if (canon) canon.start();
+        setHide(true);
+        setTimeout(() => canon.stop(), 10000);
+        playCheerSound();
+        setGrape(GRAPE);
+        setDisplayText(feliz);
+        break;
+      case 36:
+        if (!isTest && month === 12) break;
+        setDisplayText(text);
+        if (isTest || min === 59) playReadyToCampanadas();
+        break;
+      case 44:
+        if (!isTest && month === 1) break;
+        playCuartos();
+        setDisplayText(Cuartos);
+        break;
+      case 58:
+        const ring = isTest || (min === 59 && month === 1);
+        ring ? setDisplayText(Campanadas) : setDisplayText(text);
+        break;
     }
   };
 
   useEffect(() => {
-    return CuartosSound
-      ? () => {
-          console.log("Unloading Sound");
-          CuartosSound.unloadAsync();
-        }
-      : undefined;
+    return CuartosSound ? () => CuartosSound.unloadAsync() : undefined;
   }, [CuartosSound]);
 
-  useEffect(() => {
-    const interval = setInterval(() => setClock(), 10);
-    return () => clearInterval(interval);
-  });
   useEffect(() => {
     const testText = isTest ? "TEST STOP" : "TEST";
     setTestText(testText);
@@ -180,35 +133,51 @@ export default function Count() {
       if (bellSound2) bellSound2.unloadAsync();
       if (CuartosSound) CuartosSound.unloadAsync();
       setDisplayText(text);
-      setHide(false);
-      countCalc(-1);
     }
   }, [isTest]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.displayTextContainer}>
-        <Text style={styles.displayText}>{displayText}</Text>
-      </View>
-      {!hide && (
+    <>
+      <ConfettiCannon
+        fadeOut
+        explosionSpeed={500}
+        fallSpeed={4000}
+        count={200}
+        origin={{ x: -10, y: 0 }}
+        autoStart={false}
+        ref={(ref) => setCanon(ref)}
+      />
+      <View style={styles.container}>
+        <View style={styles.displayTextContainer}>
+          <Text style={styles.displayText}>{displayText}</Text>
+          <Text style={styles.displayGrapeText}>{grape}</Text>
+        </View>
         <View style={styles.container}>
           <View style={{ marginTop: 5 }}>
-            <NewClock />
+            <NewClock onChange={onChange} />
           </View>
         </View>
-      )}
-      <View>
-        {/* <Button
-                    icon="play-circle-outline"
-                    style={{ marginTop: 20, marginBottom: 50 }}
-                    color="#000000"
-                    mode="outlined"
-                    onPress={() => { setIsTest(!isTest) }}
-                >
-                    {testText}
-                </Button> */}
+        <View
+          style={{
+            marginTop: 20,
+            marginBottom: 50,
+            position: "absolute",
+            bottom: 0,
+          }}
+        >
+          <Button
+            icon="play-circle-outline"
+            color="grey"
+            mode="outlined"
+            onPress={() => {
+              setIsTest(!isTest);
+            }}
+          >
+            {testText}
+          </Button>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -220,14 +189,29 @@ const styles = StyleSheet.create({
     fontSize: RFValue(15),
   },
   displayText: {
-    fontSize: RFValue(20),
+    fontSize: RFValue(18),
     fontWeight: "bold",
-    marginTop: "15%",
     color: "grey",
+    textAlign: "center",
+  },
+  displayGrapeText: {
+    fontSize: RFValue(45),
+    fontWeight: "bold",
+    marginTop: "5%",
+    color: "grey",
+    textAlign: "center",
+  },
+  displayGrape: {
+    fontSize: RFValue(40),
+    marginTop: "8%",
+    fontWeight: "bold",
+    color: "grey",
+    textAlign: "center",
   },
   displayTextContainer: {
     position: "absolute",
-    top: 0,
+    top: 20,
+    width: "100%",
   },
   countDownNumber: {
     textAlign: "center",

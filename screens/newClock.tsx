@@ -59,9 +59,10 @@ export default function Clock(props: Props) {
           </View>
         </View>
         <View style={styles.clockContainer}>
-          {HOURS.map((v) => {
+          {HOURS.map((v, i) => {
             return (
               <View
+                key={i}
                 style={[
                   styles.objContainer,
                   { transform: [{ rotate: `${v * 30}deg` }] },
@@ -89,9 +90,10 @@ export default function Clock(props: Props) {
               </View>
             );
           })}
-          {HOURS.map((v) => {
+          {HOURS.map((v, i) => {
             return (
               <View
+                key={i}
                 style={[
                   styles.objContainerMin,
                   { transform: [{ rotate: `${v * 30}deg` }] },
