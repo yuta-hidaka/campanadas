@@ -54,7 +54,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <Count />
-      <BannerAd unitId={TestIds.BANNER} />
+      {/* <BannerAd unitId={TestIds.BANNER} /> */}
     </SafeAreaView>
   );
 }
