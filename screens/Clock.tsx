@@ -1,202 +1,261 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Audio } from "expo-av";
+import React, { useEffect, useState } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
+import { Logs } from "expo";
+import { black } from "react-native-paper/lib/typescript/styles/colors";
 
-export default class AnalogClock extends Component {
+type Props = {
+  size?: number;
+  onChange?: (v: Date) => void;
+};
 
-    constructor(props) {
-        super(props);
+const HOURS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-        let d = new Date();
+export default function Clock(props: Props) {
+  const [hourDegree, setHourDegree] = useState(0);
+  const [minDegree, setMinDegree] = useState(0);
+  const [secDegree, setSecDegree] = useState(0);
+  const [time, setTime] = useState(new Date());
 
-        this.state = {
-            sec: d.getSeconds() * 6,
-            min: d.getMinutes() * 6 + (d.getSeconds() * 6) / 60,
-            hour: ((d.getHours() % 12) / 12) * 360 + 90 +
-                (d.getMinutes() * 6 + (d.getSeconds() * 6) / 60) / 12,
-        };
+  useEffect(() => {
+    const interval2 = setInterval(() => {
+      const now = new Date();
+      setTime(now);
+      setHourDegree(now.getHours() * 30);
+      setMinDegree(now.getMinutes() * 6);
+      setSecDegree((now.getSeconds() + now.getMilliseconds() / 1000) * 6);
+    }, 100);
+    return () => clearInterval(interval2);
+  }, []);
 
-    }
+  useEffect(() => props?.onChange && props.onChange(time), [time]);
 
-    componentDidMount() {
-        this.timer = setInterval(() => {
-            let d = new Date();
-            this.setState({ sec: d.getSeconds() * 6 });
-            this.setState({
-                min: d.getMinutes() * 6 +
-                    (d.getSeconds() * 6) / 60
-            });
-            this.setState({
-                hour: ((d.getHours() % 12) / 12) * 360 + 90 +
-                    (d.getMinutes() * 6 + (d.getSeconds() * 6) / 60) / 12
-            });
-        }, 500);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.timer);
-    }
-
-    clockFrame() {
-        return {
-            width: this.props.clockSize,
-            height: this.props.clockSize,
-            position: 'relative',
-            borderColor: 'black',
-            borderWidth: this.props.clockBorderWidth,
-            borderRadius: this.props.clockSize / 2
-        }
-    }
-
-    clockHolder() {
-        return {
-            width: this.props.clockSize,
-            height: this.props.clockSize,
-            position: 'absolute',
-            right: -this.props.clockBorderWidth,
-            bottom: -this.props.clockBorderWidth
-        }
-    }
-
-    clockFace() {
-        return {
-            width: this.props.clockCentreSize,
-            height: this.props.clockCentreSize,
-            backgroundColor: this.props.clockCentreColor,
-            borderRadius: this.props.clockCentreSize / 2,
-            top: (this.props.clockSize - this.props.clockCentreSize) / 2,
-            left: (this.props.clockSize - this.props.clockCentreSize) / 2
-        }
-    }
-
-    hourHandStyles() {
-        return {
-            width: 0,
-            height: 0,
-            position: 'absolute',
-            backgroundColor: this.props.hourHandColor,
-            top: this.props.clockSize / 2,
-            left: this.props.clockSize / 2,
-            marginVertical: -this.props.hourHandWidth,
-            marginLeft: -this.props.hourHandLength / 2,
-            paddingVertical: this.props.hourHandWidth,
-            paddingLeft: this.props.hourHandLength,
-            borderTopLeftRadius: this.props.hourHandCurved ?
-                this.props.hourHandWidth : 0,
-            borderBottomLeftRadius: this.props.hourHandCurved ?
-                this.props.hourHandWidth : 0
-        }
-    }
-
-    minuteHandStyles() {
-        return {
-            width: 0,
-            height: 0,
-            position: 'absolute',
-            backgroundColor: this.props.minuteHandColor,
-            top: this.props.clockSize / 2,
-            left: this.props.clockSize / 2,
-            marginTop: -(this.props.minuteHandLength / 2),
-            marginHorizontal: -this.props.minuteHandWidth,
-            paddingTop: this.props.minuteHandLength,
-            paddingHorizontal: this.props.minuteHandWidth,
-            borderTopLeftRadius: this.props.minuteHandCurved ?
-                this.props.minuteHandWidth : 0,
-            borderTopRightRadius: this.props.minuteHandCurved ?
-                this.props.minuteHandWidth : 0
-        }
-    }
-
-    secondHandStyles() {
-        return {
-            width: 0,
-            height: 0,
-            position: 'absolute',
-            backgroundColor: 'black',
-            top: this.props.clockSize / 2,
-            left: this.props.clockSize / 2,
-            marginTop: -(this.props.secondHandLength / 2),
-            marginHorizontal: -this.props.secondHandWidth,
-            paddingTop: this.props.secondHandLength,
-            paddingHorizontal: this.props.secondHandWidth,
-            borderTopLeftRadius: this.props.secondHandCurved ?
-                this.props.secondHandWidth : 0,
-            borderTopRightRadius: this.props.secondHandCurved ?
-                this.props.secondHandWidth : 0
-        }
-    }
-
-    render() {
-        return (
-            <View style={this.clockFrame()}>
-                {/* Uncomment for background image
-        <Image
-          style={{width: this.props.clockSize - this.props.clockBorderWidth*2,
-            height: this.props.clockSize - this.props.clockBorderWidth*2}}
-          resizeMode='stretch'
-          source={require('./img/clockBack.png')}
-        />
-        */}
-
-                <View style={this.clockHolder()}>
-
-                    <View style={[this.hourHandStyles(),
-                    {
-                        transform: [{ rotate: this.state.hour + 'deg' },
-                        {
-                            translateX: -(this.props.hourHandOffset +
-                                this.props.hourHandLength / 2)
-                        }]
-                    }]}
-                    />
-
-                    <View style={[this.minuteHandStyles(),
-                    {
-                        transform: [{ rotate: this.state.min + 'deg' },
-                        {
-                            translateY: -(this.props.minuteHandOffset +
-                                this.props.minuteHandLength / 2)
-                        }]
-                    }]}
-                    />
-
-                    <View style={[this.secondHandStyles(),
-                    {
-                        transform: [{ rotate: this.state.sec + 'deg' },
-                        {
-                            translateY: -(this.props.secondHandOffset +
-                                this.props.secondHandLength / 2)
-                        }]
-                    }]}
-                    />
-
-                    <View style={this.clockFace()} />
-
+  return (
+    <>
+      <View style={styles.container}>
+        {/* Time */}
+        <View style={[styles.datetimeContainer]}>
+          <View style={[styles.dateContainer]}>
+            <Text style={[styles.dateText]}>
+              {`0${time.getMonth() + 1}`.slice(-2)}
+            </Text>
+            {/* <Text style={[styles.dateText]}></Text> */}
+            <Text style={[styles.dateText]}>
+              {`0${time.getDate()}`.slice(-2)}
+            </Text>
+          </View>
+          <View style={[styles.timeContainer]}>
+            <Text style={[styles.timeText]}>
+              {`0${time.getHours()}`.slice(-2)}
+            </Text>
+            <Text style={[styles.timeText]}>
+              {`0${time.getMinutes()}`.slice(-2)}
+            </Text>
+            <Text style={[styles.timeText]}>
+              {`0${time.getSeconds()}`.slice(-2)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.clockContainer}>
+          {HOURS.map((v, i) => {
+            return (
+              <View
+                key={i}
+                style={[
+                  styles.objContainer,
+                  { transform: [{ rotate: `${v * 30}deg` }] },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.obj,
+                    Math.abs(time.getHours() - 12) === v && {
+                      backgroundColor: "#aacf53",
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.objText,
+                      Math.abs(time.getHours() - 12) === v && {
+                        color: "white",
+                      },
+                    ]}
+                  >
+                    {v}
+                  </Text>
                 </View>
-            </View>
-        )
-    };
-};
+              </View>
+            );
+          })}
+          {HOURS.map((v, i) => {
+            return (
+              <View
+                key={i}
+                style={[
+                  styles.objContainerMin,
+                  { transform: [{ rotate: `${v * 30}deg` }] },
+                ]}
+              >
+                <View style={[styles.objMin]}>
+                  <Text style={[styles.objTextMin]}>{v * 5}</Text>
+                </View>
+              </View>
+            );
+          })}
+          <View
+            style={[
+              styles.center,
+              { transform: [{ rotate: `${minDegree}deg` }] },
+            ]}
+          >
+            <View style={styles.min}></View>
+          </View>
+          <View
+            style={[
+              styles.center,
+              { transform: [{ rotate: `${secDegree}deg` }] },
+            ]}
+          >
+            <View style={styles.sec}></View>
+          </View>
+        </View>
+      </View>
+    </>
+  );
+}
 
-AnalogClock.defaultProps = {
-    backgroundImage: './img/clockBack.png',
-    clockSize: RFValue(250),
-    clockBorderWidth: 7,
-    clockCentreSize: 15,
-    clockCentreColor: 'black',
-    hourHandColor: 'black',
-    hourHandCurved: true,
-    hourHandLength: 70,
-    hourHandWidth: 5.5,
-    hourHandOffset: 0,
-    minuteHandColor: 'black',
-    minuteHandCurved: true,
-    minuteHandLength:  RFValue(100),
-    minuteHandWidth: 5,
-    minuteHandOffset: 0,
-    secondHandColor: 'black',
-    secondHandCurved: false,
-    secondHandLength:  RFValue(100),
-    secondHandWidth: 2,
-    secondHandOffset: 0,
-};
+const styles = StyleSheet.create({
+  container: {
+    margin: "auto",
+    textAlign: "center",
+  },
+  datetimeContainer: {
+    width: 150,
+    height: "100%",
+    position: "absolute",
+    flex: 1,
+    alignSelf: "center",
+    paddingVertical: "50%",
+  },
+  timeContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  dateContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  dateText: {
+    fontSize: RFValue(40),
+    flex: 1,
+    alignSelf: "center",
+    textAlign: "center",
+    color: "grey",
+  },
+  timeText: {
+    fontSize: RFValue(35),
+    flex: 1,
+    textAlign: "center",
+    color: "grey",
+  },
+  clockContainer: {
+    width: 20,
+    height: 300,
+    margin: "auto",
+    textAlign: "center",
+    display: "flex",
+  },
+  center: {
+    width: 20,
+    height: "100%",
+    position: "absolute",
+    textAlign: "center",
+    margin: "auto",
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  min: {
+    height: 15,
+    width: 10,
+    backgroundColor: "#aacf53",
+    borderRadius: 9999,
+    top: "15%",
+  },
+  sec: {
+    height: 15,
+    width: 10,
+    // backgroundColor: "grey",
+    backgroundColor: "#aacf53",
+    borderRadius: 9999,
+    top: "15%",
+  },
+  obj: {
+    color: "grey",
+    position: "absolute",
+    borderRadius: 999999,
+    flex: 1,
+    alignContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    height: 25,
+    width: 25,
+  },
+  objContainer: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    textAlign: "center",
+  },
+  objText: {
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "grey",
+    flex: 1,
+    alignContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: "auto",
+  },
+  objMin: {
+    color: "grey",
+    position: "absolute",
+    borderRadius: 999999,
+    flex: 1,
+    alignContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    height: 25,
+    width: 25,
+    marginTop: 20,
+  },
+  objContainerMin: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    alignContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+  objTextMin: {
+    fontSize: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "grey",
+    flex: 1,
+    alignContent: "center",
+    alignSelf: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: "auto",
+  },
+});

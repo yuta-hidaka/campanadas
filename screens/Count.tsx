@@ -5,7 +5,7 @@ import { Button } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
 import Clock from "./Clock";
 import { Logs } from "expo";
-import NewClock from "./newClock";
+import NewClock from "./Clock";
 import ConfettiCannon from "react-native-confetti-cannon";
 
 Logs.enableExpoCliLogging();
@@ -96,12 +96,12 @@ export default function Count() {
         break;
       case 34:
         if (!isTest && month === 12) break;
-        if (canon) canon.start();
-        setHide(true);
-        setTimeout(() => canon.stop(), 10000);
         playCheerSound();
         setGrape(GRAPE);
         setDisplayText(feliz);
+        setTimeout(() => canon.stop(), 10000);
+        setHide(true);
+        if (canon) canon.start();
         break;
       case 36:
         if (!isTest && month === 12) break;
@@ -169,9 +169,7 @@ export default function Count() {
             icon="play-circle-outline"
             color="grey"
             mode="outlined"
-            onPress={() => {
-              setIsTest(!isTest);
-            }}
+            onPress={() => setIsTest(!isTest)}
           >
             {testText}
           </Button>
