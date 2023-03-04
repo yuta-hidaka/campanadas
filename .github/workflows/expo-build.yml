@@ -39,6 +39,3 @@ jobs:
 
       - name: 🚀 Create update
         run: eas update --auto --non-interactive
-
-      # - name: Build on EAS
-      #   run: npx eas-cli build --platform all --non-interactive
