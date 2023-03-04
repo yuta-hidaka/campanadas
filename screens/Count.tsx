@@ -40,8 +40,6 @@ export default function Count() {
   const [CuartosSound, setCuartosSound]: any = useState();
   const [cheerSound, setCheerSound]: any = useState();
   const [displayText, setDisplayText] = useState(text);
-  // Ads
-  const [loaded, setLoaded] = useState(false);
 
   const playCampanadas = async () => {
     const { sound } = await Audio.Sound.createAsync(

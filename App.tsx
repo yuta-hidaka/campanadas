@@ -23,8 +23,7 @@ export default function App() {
         StoreReview.requestReview();
       }
       await requestTrackingPermissionsAsync();
-      const adapterStatuses = await mobileAds().initialize();
-      // console.log(adapterStatuses);
+      await mobileAds().initialize();
     })();
   });
   return (
