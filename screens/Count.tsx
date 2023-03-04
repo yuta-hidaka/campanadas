@@ -146,10 +146,6 @@ export default function Count() {
   }, []);
 
   useEffect(() => {
-    if (!interstitialAd.loaded) interstitialAd.load();
-  }, [interstitialAd.loaded]);
-
-  useEffect(() => {
     return CuartosSound ? () => CuartosSound.unloadAsync() : undefined;
   }, [CuartosSound]);
 
