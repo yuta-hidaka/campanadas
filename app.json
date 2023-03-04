@@ -21,7 +21,14 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
       },
       "bundleIdentifier": "com.yuta322.campanadas",
+<<<<<<< Updated upstream
       "buildNumber": "2.1.8"
+=======
+      "buildNumber": "2.1.7",
+      "infoPlist": {
+        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+      }
+>>>>>>> Stashed changes
     },
     "android": {
       "versionCode": 480020108,
@@ -72,7 +79,8 @@
           "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ]
-    ]
+    ],
+    "owner": "yuta322"
   },
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-8220669417943263~8421256202",
