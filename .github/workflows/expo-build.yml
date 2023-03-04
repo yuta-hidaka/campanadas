@@ -8,19 +8,19 @@ jobs:
     if: ${{ contains(github.event.head_commit.message, '[build]') }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
+          cache: yarn
 
-      - name: Setup Expo
-        uses: expo/expo-github-action@v5
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
         with:
-          expo-version: 4.x
-          expo-token: ${{ secrets.EXPO_TOKEN }}
-          expo-cache: true
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Setup git
         run: git config --global user.email "yuta322@gmail.com" && git config --global user.name "Yuta Hidaka"
@@ -29,17 +29,13 @@ jobs:
         run: yarn add --dev standard-version@next standard-version-expo
 
       - name: Update standard version
-        run: yarn standard-version --release-as patch && git push
+        run: yarn standard-version --release-as patch
+
+      - name: Git push
+        run: git push
 
       - name: Install dependencies
-        run: |
-          if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
-          npm i
-          fi
+        run: yarn install
 
       - name: Build on EAS
         run: npx eas-cli build --platform all --non-interactive
