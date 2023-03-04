@@ -37,7 +37,12 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: 🚀 Create update
+      # - name: 🚀 Create update
+      #   env:
+      #     NODE_OPTIONS: "--openssl-legacy-provider"
+      #   run: eas update --auto --non-interactive
+
+      - name: 🚀🚀🚀🚀🚀 Build on EAS 🚀🚀🚀🚀🚀
         env:
           NODE_OPTIONS: "--openssl-legacy-provider"
-        run: eas update --auto --non-interactive
+        run: npx eas-cli build --platform all --non-interactive --auto-submit --no-wait
