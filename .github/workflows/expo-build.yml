@@ -37,5 +37,8 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Build on EAS
-        run: npx eas-cli build --platform all --non-interactive
+      - name: 🚀 Create update
+        run: eas update --auto --non-interactive
+
+      # - name: Build on EAS
+      #   run: npx eas-cli build --platform all --non-interactive
