@@ -45,4 +45,4 @@ jobs:
       - name: 🚀🚀🚀🚀🚀 Build on EAS 🚀🚀🚀🚀🚀
         env:
           NODE_OPTIONS: "--openssl-legacy-provider"
-        run: npx eas-cli build --platform all --non-interactive --auto-submit --no-wait
+        run: npx eas-cli build --platform all --non-interactive --auto-submit --no-wait --clear-credentials
