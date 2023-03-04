@@ -21,14 +21,10 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
       },
       "bundleIdentifier": "com.yuta322.campanadas",
-<<<<<<< Updated upstream
-      "buildNumber": "2.1.8"
-=======
-      "buildNumber": "2.1.7",
+      "buildNumber": "2.1.8",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
       }
->>>>>>> Stashed changes
     },
     "android": {
       "versionCode": 480020108,
