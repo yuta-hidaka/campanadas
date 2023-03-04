@@ -1,10 +1,6 @@
-import { Audio } from "expo-av";
 import React, { useEffect, useState } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
-import { Button } from "react-native-paper";
+import { StyleSheet, Text, View } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
-import { Logs } from "expo";
-import { black } from "react-native-paper/lib/typescript/styles/colors";
 
 type Props = {
   size?: number;
@@ -14,7 +10,6 @@ type Props = {
 const HOURS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 export default function Clock(props: Props) {
-  const [hourDegree, setHourDegree] = useState(0);
   const [minDegree, setMinDegree] = useState(0);
   const [secDegree, setSecDegree] = useState(0);
   const [time, setTime] = useState(new Date());
@@ -23,7 +18,6 @@ export default function Clock(props: Props) {
     const interval2 = setInterval(() => {
       const now = new Date();
       setTime(now);
-      setHourDegree(now.getHours() * 30);
       setMinDegree(now.getMinutes() * 6);
       setSecDegree((now.getSeconds() + now.getMilliseconds() / 1000) * 6);
     }, 100);

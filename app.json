@@ -7,8 +7,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -45,7 +44,10 @@
     "extra": {
       "MainTagsHomeID": "4b48c4cc-c273-415f-b6b9-bc4ae24c53be",
       "adIdIosBanner": "ca-app-pub-8220669417943263/6642282437",
-      "adIdAndroidBanner": "ca-app-pub-8220669417943263/5795092860"
+      "adIdAndroidBanner": "ca-app-pub-8220669417943263/5795092860",
+      "eas": {
+        "projectId": "9a759474-c68c-4127-aa55-0749d2323004"
+      }
     },
     "description": "",
     "plugins": [
@@ -53,8 +55,21 @@
         "expo-build-properties",
         {
           "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0",
             "extraProguardRules": "-keep class com.google.android.gms.internal.consent_sdk.** { *; }"
+          },
+          "ios": {
+            "deploymentTarget": "13.0",
+            "useFrameworks": "static"
           }
+        }
+      ],
+      [
+        "expo-tracking-transparency",
+        {
+          "userTrackingPermission": "This identifier will be used to deliver personalized ads to you."
         }
       ]
     ]

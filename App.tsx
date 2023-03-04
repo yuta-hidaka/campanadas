@@ -1,11 +1,14 @@
-import Constants from "expo-constants";
-import React, { useEffect } from "react";
-import { Platform, SafeAreaView, StyleSheet, View } from "react-native";
-import Count from "./screens/Count";
 import * as StoreReview from "expo-store-review";
-import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
-import { AppOpenAd, InterstitialAd, RewardedAd, BannerAd, TestIds } from 'react-native-google-mobile-ads';
-
+import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
+import React, { useEffect } from "react";
+import { Platform, SafeAreaView, StyleSheet } from "react-native";
+import mobileAds, {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
+import Count from "./screens/Count";
 /*
 IOS
   App
@@ -26,35 +29,32 @@ Android
 
 */
 const banner = __DEV__
-  ? "ca-app-pub-3940256099942544/6300978111"
+  ? TestIds.BANNER
   : Platform.select({
       ios: "ca-app-pub-8220669417943263/1171112255",
       android: "ca-app-pub-8220669417943263/3425191760",
-    });
-
-const interstitial = __DEV__
-  ? "ca-app-pub-3940256099942544/6300978111"
-  : Platform.select({
-      ios: "ca-app-pub-8220669417943263/7232574839",
-      android: "ca-app-pub-8220669417943263/9947750974",
-    });
+    }) ?? "";
 
 export default function App() {
   useEffect(() => {
     (async () => {
-      if (await StoreReview.hasAction()) {
+      if (!__DEV__ && (await StoreReview.hasAction())) {
         StoreReview.requestReview();
       }
+      await requestTrackingPermissionsAsync();
       const result = await check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
       if (result === RESULTS.DENIED) {
+        // The permission has not been requested, so request it.
         await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
       }
+      const adapterStatuses = await mobileAds().initialize();
+      // console.log(adapterStatuses);
     })();
   });
   return (
     <SafeAreaView style={styles.container}>
       <Count />
-      {/* <BannerAd unitId={TestIds.BANNER} /> */}
+      <BannerAd size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER} unitId={banner} />
     </SafeAreaView>
   );
 }

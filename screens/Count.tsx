@@ -1,17 +1,29 @@
 import { Audio } from "expo-av";
 import React, { useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
+import {
+  AdEventType,
+  InterstitialAd,
+  TestIds
+} from "react-native-google-mobile-ads";
 import { Button } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
-import Clock from "./Clock";
-import { Logs } from "expo";
 import NewClock from "./Clock";
-import ConfettiCannon from "react-native-confetti-cannon";
-
-Logs.enableExpoCliLogging();
 
 const isIos = Platform.OS === "ios";
 const GRAPE = 12;
+
+const interstitial = __DEV__
+  ? TestIds.INTERSTITIAL
+  : Platform.select({
+      ios: "ca-app-pub-8220669417943263/7232574839",
+      android: "ca-app-pub-8220669417943263/9947750974",
+    }) ?? "";
+
+const interstitialAd = InterstitialAd.createForAdRequest(interstitial, {
+  requestNonPersonalizedAdsOnly: true,
+});
 
 export default function Count() {
   const text = "Prepararos para comer las uvas !!!";
@@ -20,18 +32,16 @@ export default function Count() {
   const feliz = "Feliz año nuevo!!!🥳";
   const [Sec, setSec] = useState(0);
   const [grape, setGrape] = useState(GRAPE);
-  const [hide, setHide] = useState(false);
   const [canon, setCanon] = useState<any>();
-
   const [isTest, setIsTest] = useState(false);
-
   const [testText, setTestText] = useState("TEST");
-
   const [bellSound, setBellSound]: any = useState();
   const [bellSound2, setBellSound2]: any = useState();
   const [CuartosSound, setCuartosSound]: any = useState();
   const [cheerSound, setCheerSound]: any = useState();
   const [displayText, setDisplayText] = useState(text);
+  // Ads
+  const [loaded, setLoaded] = useState(false);
 
   const playCampanadas = async () => {
     const { sound } = await Audio.Sound.createAsync(
@@ -87,7 +97,7 @@ export default function Count() {
       secNumber <= 33 &&
       (month === 1 || isTest);
     if (campanadas) {
-      setGrape((v) => v - 1);
+      setGrape(GRAPE - Sec === 60 ? 0 : Math.round(Sec / 3));
       playCampanadas();
     }
     switch (secNumber) {
@@ -100,7 +110,7 @@ export default function Count() {
         setGrape(GRAPE);
         setDisplayText(feliz);
         setTimeout(() => canon.stop(), 10000);
-        setHide(true);
+        setTimeout(() => interstitialAd.show(), 4000);
         if (canon) canon.start();
         break;
       case 36:
@@ -119,6 +129,30 @@ export default function Count() {
         break;
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = interstitialAd.addAdEventsListener(
+      ({ type }) => {
+        switch (type) {
+          case AdEventType.CLOSED:
+            interstitialAd.load();
+            break;
+          default:
+            break;
+        }
+      }
+    );
+
+    // Start loading the interstitial straight away
+    interstitialAd.load();
+
+    // Unsubscribe from events on unmount
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    if (!interstitialAd.loaded) interstitialAd.load();
+  }, [interstitialAd.loaded]);
 
   useEffect(() => {
     return CuartosSound ? () => CuartosSound.unloadAsync() : undefined;
@@ -172,6 +206,17 @@ export default function Count() {
             onPress={() => setIsTest(!isTest)}
           >
             {testText}
+          </Button>
+          <Button
+            onPress={() => {
+              if (interstitialAd.loaded) {
+                interstitialAd.show();
+              } else {
+                interstitialAd.load();
+              }
+            }}
+          >
+            show
           </Button>
         </View>
       </View>
