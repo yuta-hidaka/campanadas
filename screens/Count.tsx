@@ -5,7 +5,7 @@ import ConfettiCannon from "react-native-confetti-cannon";
 import {
   AdEventType,
   InterstitialAd,
-  TestIds
+  TestIds,
 } from "react-native-google-mobile-ads";
 import { Button } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -80,7 +80,7 @@ export default function Count() {
   };
 
   const onChange = (now: Date) => {
-    const secNumber = now.getSeconds();
+    const secNumber = Math.round(now.getSeconds());
     if (secNumber === Sec) return;
     setSec(secNumber);
 
@@ -97,7 +97,7 @@ export default function Count() {
       secNumber <= 33 &&
       (month === 1 || isTest);
     if (campanadas) {
-      setGrape(GRAPE - Sec === 60 ? 0 : Math.round(Sec / 3));
+      setGrape(GRAPE - (secNumber === 60 ? 0 : secNumber / 3));
       playCampanadas();
     }
     switch (secNumber) {
@@ -107,11 +107,14 @@ export default function Count() {
       case 34:
         if (!isTest && month === 12) break;
         playCheerSound();
-        setGrape(GRAPE);
         setDisplayText(feliz);
-        setTimeout(() => canon.stop(), 10000);
-        setTimeout(() => interstitialAd.show(), 4000);
+        setGrape(0);
         if (canon) canon.start();
+        setTimeout(() => {
+          interstitialAd.show();
+          canon.stop();
+          setGrape(GRAPE);
+        }, 5000);
         break;
       case 36:
         if (!isTest && month === 12) break;
@@ -131,22 +134,16 @@ export default function Count() {
   };
 
   useEffect(() => {
-    const unsubscribe = interstitialAd.addAdEventsListener(
-      ({ type }) => {
-        switch (type) {
-          case AdEventType.CLOSED:
-            interstitialAd.load();
-            break;
-          default:
-            break;
-        }
+    const unsubscribe = interstitialAd.addAdEventsListener(({ type }) => {
+      switch (type) {
+        case AdEventType.CLOSED:
+          interstitialAd.load();
+          break;
+        default:
+          break;
       }
-    );
-
-    // Start loading the interstitial straight away
+    });
     interstitialAd.load();
-
-    // Unsubscribe from events on unmount
     return unsubscribe;
   }, []);
 
@@ -206,17 +203,6 @@ export default function Count() {
             onPress={() => setIsTest(!isTest)}
           >
             {testText}
-          </Button>
-          <Button
-            onPress={() => {
-              if (interstitialAd.loaded) {
-                interstitialAd.show();
-              } else {
-                interstitialAd.load();
-              }
-            }}
-          >
-            show
           </Button>
         </View>
       </View>

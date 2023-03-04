@@ -7,27 +7,8 @@ import mobileAds, {
   BannerAdSize,
   TestIds,
 } from "react-native-google-mobile-ads";
-import { check, PERMISSIONS, request, RESULTS } from "react-native-permissions";
 import Count from "./screens/Count";
-/*
-IOS
-  App
-  ca-app-pub-8220669417943263~7955364104
-  banner
-  ca-app-pub-8220669417943263/1171112255
-  interstitial
-  ca-app-pub-8220669417943263/7232574839
 
-Android
-  App
-  ca-app-pub-8220669417943263~8421256202
-  banner
-  ca-app-pub-8220669417943263/3425191760
-  Interstitial
-  ca-app-pub-8220669417943263/9947750974
-  
-
-*/
 const banner = __DEV__
   ? TestIds.BANNER
   : Platform.select({
@@ -42,11 +23,6 @@ export default function App() {
         StoreReview.requestReview();
       }
       await requestTrackingPermissionsAsync();
-      const result = await check(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
-      if (result === RESULTS.DENIED) {
-        // The permission has not been requested, so request it.
-        await request(PERMISSIONS.IOS.APP_TRACKING_TRANSPARENCY);
-      }
       const adapterStatuses = await mobileAds().initialize();
       // console.log(adapterStatuses);
     })();
