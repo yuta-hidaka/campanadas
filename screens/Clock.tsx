@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
 
 type Props = {
   size?: number;
@@ -145,14 +144,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   dateText: {
-    fontSize: RFValue(40),
+    fontSize: 40,
+    // fontSize: RFValue(40),
     flex: 1,
     alignSelf: "center",
     textAlign: "center",
     color: "grey",
   },
   timeText: {
-    fontSize: RFValue(35),
+    fontSize: 30,
     flex: 1,
     textAlign: "center",
     color: "grey",
