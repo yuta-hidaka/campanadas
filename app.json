@@ -2,7 +2,7 @@
   "expo": {
     "name": "campanadas",
     "slug": "campanadas",
-    "version": "2.1.11",
+    "version": "2.1.12",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,13 +21,13 @@
         "googleMobileAdsAppId": "ca-app-pub-8220669417943263~7955364104"
       },
       "bundleIdentifier": "com.yuta322.campanadas",
-      "buildNumber": "2.1.11",
+      "buildNumber": "2.1.12",
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
       }
     },
     "android": {
-      "versionCode": 480020111,
+      "versionCode": 480020112,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
