@@ -4,10 +4,13 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
       "distribution": "internal",
+      "android": {
+        "gradleCommand": ":app:assembleDebug"
+      },
       "ios": {
-        "resourceClass": "m1-medium"
+        "buildConfiguration": "Debug",
+        "image" : "macos-monterey-12.3-xcode-13.3"
       }
     },
     "preview": {
