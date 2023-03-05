@@ -35,5 +35,8 @@
     "typescript": "^4.9.4"
   },
   "private": true,
-  "version": "2.1.11"
+  "version": "2.1.11",
+  "resolutions": {
+    "standard-version-expo/**/@expo/config-plugins": "~6.0.0"
+  }
 }
