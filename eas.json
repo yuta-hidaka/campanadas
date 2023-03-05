@@ -3,14 +3,19 @@
     "version": ">= 3.7.2"
   },
   "build": {
-    "development": {
+    "development-simulator": {
+      "developmentClient": true,
       "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
       "ios": {
-        "buildConfiguration": "Debug",
-        "image" : "macos-monterey-12.3-xcode-13.3"
+        "simulator": true
+      }
+    },
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {
+        "resourceClass": "m1-medium",
+        "simulator": true
       }
     },
     "preview": {
