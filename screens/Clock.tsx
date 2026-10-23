@@ -25,6 +25,8 @@ export default function Clock(props: Props) {
 
   useEffect(() => props?.onChange && props.onChange(time), [time]);
 
+  const hour12 = time.getHours() % 12 || 12;
+
   return (
     <>
       <View style={styles.container}>
@@ -64,7 +66,7 @@ export default function Clock(props: Props) {
                 <View
                   style={[
                     styles.obj,
-                    Math.abs(time.getHours() - 12) === v && {
+                    hour12 === v && {
                       backgroundColor: "#aacf53",
                     },
                   ]}
@@ -72,7 +74,7 @@ export default function Clock(props: Props) {
                   <Text
                     style={[
                       styles.objText,
-                      Math.abs(time.getHours() - 12) === v && {
+                      hour12 === v && {
                         color: "white",
                       },
                     ]}
