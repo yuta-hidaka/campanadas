@@ -82,12 +82,15 @@ export default function Count() {
     if (secNumber === Sec) return;
     setSec(secNumber);
 
+    const hour = now.getHours();
     const min = now.getMinutes();
     const month = now.getMonth() + 1;
     const date = now.getDate();
 
     const ready =
-      isTest || (month === 12 && date === 31) || (month === 1 && date === 1);
+      isTest ||
+      (month === 12 && date === 31 && hour === 23 && min === 59) ||
+      (month === 1 && date === 1 && hour === 0 && min === 0 && secNumber <= 34);
     if (!ready) return;
 
     const campanadas =
@@ -115,7 +118,7 @@ export default function Count() {
         }, 5000);
         break;
       case 36:
-        if (!isTest && month === 12) break;
+        if (!isTest && month === 1) break;
         setDisplayText(text);
         if (isTest || min === 59) playReadyToCampanadas();
         break;
@@ -125,7 +128,7 @@ export default function Count() {
         setDisplayText(Cuartos);
         break;
       case 58:
-        const ring = isTest || (min === 59 && month === 1);
+        const ring = isTest || (min === 59 && month === 12);
         ring ? setDisplayText(Campanadas) : setDisplayText(text);
         break;
     }
