@@ -13,3 +13,8 @@ web-build/
 .DS_Store
 
 yarn-error.log
+
+# Swift package
+.build/
+.swiftpm/
+DerivedData/
