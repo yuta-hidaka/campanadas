@@ -11,6 +11,7 @@ let package = Package(
         .library(name: "CampanadasCore", targets: ["CampanadasCore"]),
         .library(name: "CampanadasUI", targets: ["CampanadasUI"]),
         .executable(name: "Campanadas", targets: ["Campanadas"]),
+        .executable(name: "CampanadasCoreCheck", targets: ["CampanadasCoreCheck"]),
     ],
     targets: [
         .target(name: "CampanadasCore"),
@@ -22,6 +23,10 @@ let package = Package(
         .executableTarget(
             name: "Campanadas",
             dependencies: ["CampanadasUI"]
+        ),
+        .executableTarget(
+            name: "CampanadasCoreCheck",
+            dependencies: ["CampanadasCore", "CampanadasUI"]
         ),
         .testTarget(
             name: "CampanadasCoreTests",

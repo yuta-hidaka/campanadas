@@ -1,0 +1,24 @@
+name: Swift core checks
+
+on:
+  push:
+    paths:
+      - "Sources/**"
+      - "Package.swift"
+      - "assets/*.mp3"
+      - ".github/workflows/swift-core.yml"
+  pull_request:
+    paths:
+      - "Sources/**"
+      - "Package.swift"
+      - "assets/*.mp3"
+      - ".github/workflows/swift-core.yml"
+
+jobs:
+  check:
+    name: CampanadasCoreCheck
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Executable core checks
+        run: swift run CampanadasCoreCheck
